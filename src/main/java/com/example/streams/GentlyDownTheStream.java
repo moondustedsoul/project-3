@@ -47,54 +47,143 @@ public class GentlyDownTheStream {
         return sortedFruitsWithFilter(fruit -> !fruit.startsWith("A"));
     }
 
-    // TODO - return a list with the first 2 elements of a sorted list of fruits
+    // DONE - return a list with the first 2 elements of a sorted list of fruits
     // Add proper validation and exception handling
     public List<String> sortedFruitsFirstTwo() throws InvalidDataException {
         // Implement with validation, null checks, and exception handling
-        return null;
+        if (fruits == null) {
+            throw new InvalidDataException("Fruits collection is null");
+        }
+
+        if (fruits.stream().anyMatch(Objects::isNull)) {
+            throw new InvalidDataException("Fruits collection contains null elements");
+        }
+
+        return fruits.stream()
+                .sorted()
+                .limit(2)
+                .toList();
     }
 
-    // TODO - return a comma separated String of sorted fruits
+    // DONE - return a comma separated String of sorted fruits
     // Handle null values and empty results gracefully
     public String commaSeparatedListOfFruits() throws InvalidDataException {
         // Implement with proper string joining and validation
-        return null;
+        if (fruits == null) {
+            throw new InvalidDataException("Fruits collection is null");
+        }
+
+        if (fruits.stream().anyMatch(Objects::isNull)) {
+            throw new InvalidDataException("Fruits collection contains null elements");
+        }
+
+        return fruits.stream()
+                .sorted()
+                .collect(Collectors.joining(", "));
     }
 
-    // TODO - return a list of veggies sorted in reverse (descending) order
+    // DONE - return a list of veggies sorted in reverse (descending) order
     // Use Comparator.reverseOrder() and handle edge cases
     public List<String> reverseSortedVeggies() throws InvalidDataException {
-        return null;
+        if (veggies == null) {
+            throw new InvalidDataException("Veggies collection is null");
+        }
+
+        if (veggies.stream().anyMatch(Objects::isNull)) {
+            throw new InvalidDataException("Veggies collection contains null elements");
+        }
+
+        return veggies.stream()
+                .sorted(Comparator.reverseOrder())
+                .toList();
     }
 
-    // TODO - return a list of veggies sorted in reverse order, all in upper case
+    // DONE - return a list of veggies sorted in reverse order, all in upper case
     // Chain multiple stream operations with proper exception handling
     public List<String> reverseSortedVeggiesInUpperCase() throws InvalidDataException {
-        return null;
+        if (veggies == null) {
+            throw new InvalidDataException("Veggies collection is null");
+        }
+
+        if (veggies.stream().anyMatch(Objects::isNull)) {
+            throw new InvalidDataException("Veggies collection contains null elements");
+        }
+
+        return veggies.stream()
+                .sorted(Comparator.reverseOrder())
+                .map(v -> v.toUpperCase(Locale.ROOT))
+                .toList();
     }
 
-    // TODO - return a list of the top 10 values in the list of random integers
+    // DONE - return a list of the top 10 values in the list of random integers
     // Handle cases where list has fewer than 10 elements
     public List<Integer> topTen() throws InvalidDataException {
-        return null;
+        if (integerValues == null) {
+            throw new InvalidDataException("Integer values collection is null");
+        }
+
+        if (integerValues.stream().anyMatch(Objects::isNull)) {
+            throw new InvalidDataException("Integer values collection contains null elements");
+        }
+
+        return integerValues.stream()
+                .sorted(Comparator.reverseOrder())
+                .limit(10)
+                .toList();
     }
 
-    // TODO - return a list of the top 10 unique values in the list of random integers
+    // DONE - return a list of the top 10 unique values in the list of random integers
     // Use distinct() operation and handle empty results
     public List<Integer> topTenUnique() throws InvalidDataException {
-        return null;
+        if (integerValues == null) {
+            throw new InvalidDataException("Integer values collection is null");
+        }
+
+        if (integerValues.stream().anyMatch(Objects::isNull)) {
+            throw new InvalidDataException("Integer values collection contains null elements");
+        }
+
+        return integerValues.stream()
+                .sorted(Comparator.reverseOrder())
+                .distinct()
+                .limit(10)
+                .toList();
     }
 
-    // TODO - return a list of the top 10 unique values that are odd
+    // DONE - return a list of the top 10 unique values that are odd
     // Combine filtering, distinct, and limiting operations
     public List<Integer> topTenUniqueOdd() throws InvalidDataException {
-        return null;
+        if (integerValues == null) {
+            throw new InvalidDataException("Integer values collection is null");
+        }
+
+        if (integerValues.stream().anyMatch(Objects::isNull)) {
+            throw new InvalidDataException("Integer values collection contains null elements");
+        }
+
+        return integerValues.stream()
+                .sorted(Comparator.reverseOrder())
+                .distinct()
+                .filter(integer -> integer % 2 != 0)
+                .limit(10)
+                .toList();
     }
 
-    // TODO - return the average of all random numbers
+    // DONE - return the average of all random numbers
     // Handle potential OptionalDouble and division by zero scenarios
     public Double average() throws InvalidDataException {
-        return null;
+        if (integerValues == null) {
+            throw new InvalidDataException("Integer values collection is null");
+        }
+
+        if (integerValues.stream().anyMatch(Objects::isNull)) {
+            throw new InvalidDataException("Integer values collection contains null elements");
+        }
+
+        return integerValues.stream()
+                .mapToInt(i -> i)
+                .average()
+                .orElse(0.0);
     }
 
     // Generic method for safe collection operations
