@@ -28,17 +28,25 @@ public class GentlyDownTheStream {
      * Returns a sorted list of fruits with comprehensive error checking
      */
     public List<String> sortedFruits() throws InvalidDataException {
-        try {
-            validateCollection(fruits, "Fruits collection");
-
-            return fruits.stream()
-                    .filter(Objects::nonNull) // Handle potential null elements
-                    .sorted()
-                    .collect(Collectors.toList());
-        } catch (Exception e) {
-            throw new InvalidDataException("Failed to sort fruits: " + e.getMessage());
+        if (fruits == null) {
+            throw new IllegalArgumentException("Fruits collection cannot be null");
         }
+        if (fruits.isEmpty()) {
+            throw new EmptyCollectionException("Fruits collection cannot be empty");
+        }
+        if (fruits.stream().anyMatch(Objects::isNull)) {
+            throw new InvalidDataException("Fruits collection contains null elements");
+        }
+
+        return fruits.stream()
+                .sorted()
+                .toList();
     }
+    /* STUDENT NOTE - I rewrote the sortedFruits() method because this method alone was failing
+       2 tests: shouldHandleEmptyCollections and shouldHandleNullCollections, because it would
+       only ever throw InvalidDataException when the tests expect EmptyCollectionException or
+       IllegalArgumentException.
+     */
 
     /**
      * Enhanced version with custom predicate and exception handling
@@ -49,15 +57,9 @@ public class GentlyDownTheStream {
 
     // DONE - return a list with the first 2 elements of a sorted list of fruits
     // Add proper validation and exception handling
-    public List<String> sortedFruitsFirstTwo() throws InvalidDataException {
+    public List<String> sortedFruitsFirstTwo() {
         // Implement with validation, null checks, and exception handling
-        if (fruits == null) {
-            throw new InvalidDataException("Fruits collection is null");
-        }
-
-        if (fruits.stream().anyMatch(Objects::isNull)) {
-            throw new InvalidDataException("Fruits collection contains null elements");
-        }
+        validateCollection(fruits, "Fruits collection");
 
         return fruits.stream()
                 .sorted()
@@ -67,15 +69,9 @@ public class GentlyDownTheStream {
 
     // DONE - return a comma separated String of sorted fruits
     // Handle null values and empty results gracefully
-    public String commaSeparatedListOfFruits() throws InvalidDataException {
+    public String commaSeparatedListOfFruits() {
         // Implement with proper string joining and validation
-        if (fruits == null) {
-            throw new InvalidDataException("Fruits collection is null");
-        }
-
-        if (fruits.stream().anyMatch(Objects::isNull)) {
-            throw new InvalidDataException("Fruits collection contains null elements");
-        }
+        validateCollection(fruits, "Fruits collection");
 
         return fruits.stream()
                 .sorted()
@@ -84,14 +80,8 @@ public class GentlyDownTheStream {
 
     // DONE - return a list of veggies sorted in reverse (descending) order
     // Use Comparator.reverseOrder() and handle edge cases
-    public List<String> reverseSortedVeggies() throws InvalidDataException {
-        if (veggies == null) {
-            throw new InvalidDataException("Veggies collection is null");
-        }
-
-        if (veggies.stream().anyMatch(Objects::isNull)) {
-            throw new InvalidDataException("Veggies collection contains null elements");
-        }
+    public List<String> reverseSortedVeggies() {
+        validateCollection(veggies, "Veggies collection");
 
         return veggies.stream()
                 .sorted(Comparator.reverseOrder())
@@ -100,14 +90,8 @@ public class GentlyDownTheStream {
 
     // DONE - return a list of veggies sorted in reverse order, all in upper case
     // Chain multiple stream operations with proper exception handling
-    public List<String> reverseSortedVeggiesInUpperCase() throws InvalidDataException {
-        if (veggies == null) {
-            throw new InvalidDataException("Veggies collection is null");
-        }
-
-        if (veggies.stream().anyMatch(Objects::isNull)) {
-            throw new InvalidDataException("Veggies collection contains null elements");
-        }
+    public List<String> reverseSortedVeggiesInUpperCase() {
+        validateCollection(veggies, "Veggies collection");
 
         return veggies.stream()
                 .sorted(Comparator.reverseOrder())
@@ -117,14 +101,8 @@ public class GentlyDownTheStream {
 
     // DONE - return a list of the top 10 values in the list of random integers
     // Handle cases where list has fewer than 10 elements
-    public List<Integer> topTen() throws InvalidDataException {
-        if (integerValues == null) {
-            throw new InvalidDataException("Integer values collection is null");
-        }
-
-        if (integerValues.stream().anyMatch(Objects::isNull)) {
-            throw new InvalidDataException("Integer values collection contains null elements");
-        }
+    public List<Integer> topTen() {
+        validateCollection(integerValues, "Integer values collection");
 
         return integerValues.stream()
                 .sorted(Comparator.reverseOrder())
@@ -134,14 +112,8 @@ public class GentlyDownTheStream {
 
     // DONE - return a list of the top 10 unique values in the list of random integers
     // Use distinct() operation and handle empty results
-    public List<Integer> topTenUnique() throws InvalidDataException {
-        if (integerValues == null) {
-            throw new InvalidDataException("Integer values collection is null");
-        }
-
-        if (integerValues.stream().anyMatch(Objects::isNull)) {
-            throw new InvalidDataException("Integer values collection contains null elements");
-        }
+    public List<Integer> topTenUnique() {
+        validateCollection(integerValues, "Integer values collection");
 
         return integerValues.stream()
                 .sorted(Comparator.reverseOrder())
@@ -152,14 +124,8 @@ public class GentlyDownTheStream {
 
     // DONE - return a list of the top 10 unique values that are odd
     // Combine filtering, distinct, and limiting operations
-    public List<Integer> topTenUniqueOdd() throws InvalidDataException {
-        if (integerValues == null) {
-            throw new InvalidDataException("Integer values collection is null");
-        }
-
-        if (integerValues.stream().anyMatch(Objects::isNull)) {
-            throw new InvalidDataException("Integer values collection contains null elements");
-        }
+    public List<Integer> topTenUniqueOdd() {
+        validateCollection(integerValues, "Integer values collection");
 
         return integerValues.stream()
                 .sorted(Comparator.reverseOrder())
@@ -172,12 +138,10 @@ public class GentlyDownTheStream {
     // DONE - return the average of all random numbers
     // Handle potential OptionalDouble and division by zero scenarios
     public Double average() throws InvalidDataException {
-        if (integerValues == null) {
-            throw new InvalidDataException("Integer values collection is null");
-        }
-
-        if (integerValues.stream().anyMatch(Objects::isNull)) {
-            throw new InvalidDataException("Integer values collection contains null elements");
+        try {
+            validateCollection(integerValues, "Integer values collection");
+        } catch (EmptyCollectionException e) {
+            throw new InvalidDataException(e.getMessage());
         }
 
         return integerValues.stream()
